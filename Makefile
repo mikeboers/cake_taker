@@ -7,7 +7,7 @@ SRC ?= cake_taker_template.c
 .DEFAULT: build
 
 $(EXE): $(SRC)
-	gcc -o $@ -g -fno-stack-protector -D_FORTIFY_SOURCE=0 $^
+	gcc -o $@ -g -std=c99 -fno-stack-protector -D_FORTIFY_SOURCE=0 $^
 
 clean:
 	rm $(EXE)
