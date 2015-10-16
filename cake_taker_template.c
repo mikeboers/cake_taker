@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     // Manually loop for no timing attacks.
     int password_is_correct = 1;
     unsigned char crypted_password[] = CRYPTED_PASSWORD;
-    for (unsigned i = 0; CRYPTED_PASSWORD[i] != 0; i++) {
+    for (unsigned i = 0; crypted_password[i] != 0; i++) {
         if (password[i] != crypted_password[i]) {
             password_is_correct = 0;
         }
@@ -59,7 +59,8 @@ int main(int argc, char **argv) {
 
     if (password_is_correct || debug) {
 
-        printf("CORRECT!\nWriting cake to %s\n", CAKE_FILENAME);
+        char cake_filename[] = CAKE_FILENAME;
+        printf("CORRECT!\nWriting cake to %s\n", cake_filename);
 
         // Decrypt the cake.
         unsigned char cake[CAKE_SIZE];
@@ -67,7 +68,7 @@ int main(int argc, char **argv) {
         crypt(&cake[0], KEY, CAKE_SIZE);
 
         // Write the cake.
-        FILE *f = fopen(CAKE_FILENAME, "w");
+        FILE *f = fopen(cake_filename, "w");
         fwrite(cake, CAKE_SIZE, 1, f);
         fclose(f);
 
