@@ -2,14 +2,12 @@
 EXE ?= example
 SRC ?= cake_taker_template.c
 
-.PHONY: build clean
+.PHONY: build clean example
 
 .DEFAULT: build
 
-build: $(EXE)
-
 $(EXE): $(SRC)
-	gcc -o $@ -g -fno-stack-protector -D_FORTIFY_SOURCE=0 $(PACKER_ARGS) $^
+	gcc -o $@ -g -fno-stack-protector -D_FORTIFY_SOURCE=0 $^
 
 clean:
-	rm cake_taker
+	rm $(EXE)

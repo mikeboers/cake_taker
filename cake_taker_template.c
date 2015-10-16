@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 
-// The next line is replaced by pack_cake.
+// The next line is replaced by pack_cake.py
 // TEMPLATE GOES HERE
 
-#ifndef CRYPTED_CAKE // Assume this is debugging mode.
+// For development, here is a test cake.
+#ifndef CRYPTED_CAKE
     #define KEY 1234
     #define CRYPTED_PASSWORD "\262\302\323\072\171\200\276\141" // "password"
     #define CRYPTED_CAKE "\226\346\363\035\056\254\215\116\157\052"
-    #define CAKE_SIZE 10 // MUST match.
+    #define CAKE_SIZE 10 // MUST match above.
     #define CAKE_FILENAME "testing.txt"
 #endif
 
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
 
         printf("CORRECT!\nWriting cake to %s\n", CAKE_FILENAME);
 
-        // Decrypt te cake.
+        // Decrypt the cake.
         unsigned char cake[CAKE_SIZE];
         memcpy(cake, CRYPTED_CAKE, CAKE_SIZE);
         crypt(&cake[0], KEY, CAKE_SIZE);
@@ -71,7 +72,7 @@ int main(int argc, char **argv) {
         fclose(f);
 
     } else {
-        printf("Wrong password.");
+        printf("Incorrect password; please try again!");
         return 2;
     }
 

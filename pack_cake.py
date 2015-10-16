@@ -58,3 +58,6 @@ with open(c_path, 'w') as fh:
 
 # Compile it.
 subprocess.check_call(['make', 'SRC=%s' % c_path, 'EXE=%s' % args.output])
+
+# Clean up
+os.unlink(c_path)
