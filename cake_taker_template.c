@@ -24,7 +24,7 @@ unsigned next_key(unsigned k) {
 }
 
 
-void crypt(unsigned char *buffer, unsigned key, unsigned size) {
+void crypt(char *buffer, unsigned key, unsigned size) {
     // XOR encryption is also decryption!
     while (size--) {
         *buffer = *buffer ^ (key & 0xef);
@@ -44,13 +44,13 @@ int main(int argc, char **argv) {
     int debug = 0; // For testing.
 
     // Decrypt the password
-    unsigned char password[32];
+    char password[32];
     strcpy((char*)&password[0], argv[1]);
     crypt(&password[0], KEY, 32);
 
-    // Manually loop for no timing attacks.
+    // Check every character so there are no timing attacks.
     int password_is_correct = 1;
-    unsigned char crypted_password[] = CRYPTED_PASSWORD;
+    char crypted_password[] = CRYPTED_PASSWORD;
     for (unsigned i = 0; crypted_password[i] != 0; i++) {
         if (password[i] != crypted_password[i]) {
             password_is_correct = 0;
@@ -60,10 +60,10 @@ int main(int argc, char **argv) {
     if (password_is_correct || debug) {
 
         char cake_filename[] = CAKE_FILENAME;
-        printf("CORRECT!\nWriting cake to %s\n", cake_filename);
+        printf("Password is correct!\nWriting cake to %s\n", cake_filename);
 
         // Decrypt the cake.
-        unsigned char cake[CAKE_SIZE];
+        char cake[CAKE_SIZE];
         memcpy(cake, CRYPTED_CAKE, CAKE_SIZE);
         crypt(&cake[0], KEY, CAKE_SIZE);
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
         fclose(f);
 
     } else {
-        printf("Incorrect password; please try again!");
+        printf("Incorrect password; please try again!\n");
         return 2;
     }
 
