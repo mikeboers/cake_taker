@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef CAKE // Assume this is debugging mode.
+// The next line is replaced by pack_cake.
+// TEMPLATE GOES HERE
+
+#ifndef CRYPTED_CAKE // Assume this is debugging mode.
     #define KEY 1234
     #define CRYPTED_PASSWORD "\262\302\323\072\171\200\276\141" // "password"
     #define CRYPTED_CAKE "\226\346\363\035\056\254\215\116\157\052"
+    #define CAKE_SIZE 10 // MUST match.
     #define CAKE_FILENAME "testing.txt"
 #endif
 
@@ -19,9 +23,9 @@ unsigned next_key(unsigned k) {
 }
 
 
-void crypt(char *buffer, unsigned key) {
+void crypt(unsigned char *buffer, unsigned key, unsigned size) {
     // XOR encryption is also decryption!
-    while (*buffer) {
+    while (size--) {
         *buffer = *buffer ^ (key & 0xef);
         key = next_key(key);
         buffer++;
@@ -39,14 +43,15 @@ int main(int argc, char **argv) {
     int debug = 0; // For testing.
 
     // Decrypt the password
-    char password[32];
-    strcpy(&password[0], argv[1]);
-    crypt(&password[0], KEY);
+    unsigned char password[32];
+    strcpy((char*)&password[0], argv[1]);
+    crypt(&password[0], KEY, 32);
 
     // Manually loop for no timing attacks.
     int password_is_correct = 1;
+    unsigned char crypted_password[] = CRYPTED_PASSWORD;
     for (unsigned i = 0; CRYPTED_PASSWORD[i] != 0; i++) {
-        if (password[i] != CRYPTED_PASSWORD[i]) {
+        if (password[i] != crypted_password[i]) {
             password_is_correct = 0;
         }
     }
@@ -56,12 +61,13 @@ int main(int argc, char **argv) {
         printf("CORRECT!\nWriting cake to %s\n", CAKE_FILENAME);
 
         // Decrypt te cake.
-        char *cake = strdup(CRYPTED_CAKE);
-        crypt(cake, KEY);
+        unsigned char cake[CAKE_SIZE];
+        memcpy(cake, CRYPTED_CAKE, CAKE_SIZE);
+        crypt(&cake[0], KEY, CAKE_SIZE);
 
         // Write the cake.
         FILE *f = fopen(CAKE_FILENAME, "w");
-        fprintf(f, "%s", cake);
+        fwrite(cake, CAKE_SIZE, 1, f);
         fclose(f);
 
     } else {
